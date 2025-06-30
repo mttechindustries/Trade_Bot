@@ -1,0 +1,48 @@
+{
+  "name": "gemini-trade-bot-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@tanstack/react-query": "^4.36.1",
+    "axios": "^1.6.5",
+    "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^10.16.16",
+    "lightweight-charts": "^4.1.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
+    "react-router-dom": "^6.20.1",
+    "react-toastify": "^9.1.3",
+    "recharts": "^3.0.2",
+    "socket.io-client": "^4.7.4",
+    "uuid": "^9.0.1",
+    "ws": "^8.18.3",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.1",
+    "@types/node": "^22.14.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@types/uuid": "^9.0.7",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vitest": "^1.1.0"
+  }
+}

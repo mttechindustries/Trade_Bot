@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Trade Bot UI",
+  "description": "A sophisticated UI for a cryptocurrency trading bot, inspired by Freqtrade. It provides real-time trade monitoring, performance analytics, and leverages the Gemini API for market analysis and strategy insights.",
+  "requestFramePermissions": []
+}

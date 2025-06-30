@@ -1,0 +1,354 @@
+import { TickerData, CandlestickData } from '../types';
+
+interface BinanceTickerResponse {
+  symbol: string;
+  price: string;
+  priceChange: string;
+  priceChangePercent: string;
+  volume: string;
+  quoteVolume: string;
+}
+
+interface BinanceKlineResponse {
+  [key: string]: any;
+  // [timestamp, open, high, low, close, volume, closeTime, quoteVolume, trades, buyBaseVolume, buyQuoteVolume, ignore]
+}
+
+interface WebSocketConnection {
+  ws: WebSocket | null;
+  subscriptions: Set<string>;
+  reconnectAttempts: number;
+  maxReconnectAttempts: number;
+  reconnectDelay: number;
+}
+
+class RealTimeMarketDataService {
+  private static instance: RealTimeMarketDataService;
+  private wsConnection: WebSocketConnection;
+  private tickerCallbacks: Map<string, ((data: TickerData) => void)[]> = new Map();
+  private candleCallbacks: Map<string, ((data: CandlestickData) => void)[]> = new Map();
+  private priceCache: Map<string, TickerData> = new Map();
+  private isConnected = false;
+  private heartbeatInterval: NodeJS.Timeout | null = null;
+
+  // Binance WebSocket endpoints
+  private readonly WS_BASE_URL = 'wss://stream.binance.com:9443/ws/';
+  private readonly REST_BASE_URL = 'https://api.binance.com/api/v3/';
+
+  private constructor() {
+    this.wsConnection = {
+      ws: null,
+      subscriptions: new Set(),
+      reconnectAttempts: 0,
+      maxReconnectAttempts: 5,
+      reconnectDelay: 1000
+    };
+    
+    this.initializeConnection();
+  }
+
+  static getInstance(): RealTimeMarketDataService {
+    if (!RealTimeMarketDataService.instance) {
+      RealTimeMarketDataService.instance = new RealTimeMarketDataService();
+    }
+    return RealTimeMarketDataService.instance;
+  }
+
+  private async initializeConnection(): Promise<void> {
+    try {
+      // First, get initial price data via REST API
+      await this.loadInitialPrices();
+      
+      // Then establish WebSocket connection for real-time updates
+      this.connectWebSocket();
+    } catch (error) {
+      console.error('Failed to initialize real-time market data:', error);
+      this.scheduleReconnect();
+    }
+  }
+
+  private async loadInitialPrices(): Promise<void> {
+    try {
+      const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'ADAUSDT', 'DOTUSDT'];
+      
+      for (const symbol of symbols) {
+        const response = await fetch(`${this.REST_BASE_URL}ticker/24hr?symbol=${symbol}`);
+        if (response.ok) {
+          const data: BinanceTickerResponse = await response.json();
+          const ticker = this.transformBinanceTickerData(data);
+          this.priceCache.set(symbol, ticker);
+          
+          // Notify subscribers
+          this.notifyTickerSubscribers(symbol, ticker);
+        }
+      }
+      
+      console.log('✅ Loaded initial price data for', symbols.length, 'symbols');
+    } catch (error) {
+      console.error('Failed to load initial prices:', error);
+    }
+  }
+
+  private connectWebSocket(): void {
+    try {
+      // Subscribe to multiple ticker streams
+      const streams = ['btcusdt@ticker', 'ethusdt@ticker', 'solusdt@ticker', 'adausdt@ticker', 'dotusdt@ticker'];
+      const streamUrl = `${this.WS_BASE_URL}${streams.join('/')}`;
+      
+      this.wsConnection.ws = new WebSocket(streamUrl);
+      
+      this.wsConnection.ws.onopen = () => {
+        console.log('✅ WebSocket connected to Binance real-time data');
+        this.isConnected = true;
+        this.wsConnection.reconnectAttempts = 0;
+        this.startHeartbeat();
+      };
+
+      this.wsConnection.ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          this.handleWebSocketMessage(data);
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      };
+
+      this.wsConnection.ws.onclose = (event) => {
+        console.log('❌ WebSocket disconnected:', event.code, event.reason);
+        this.isConnected = false;
+        this.stopHeartbeat();
+        this.scheduleReconnect();
+      };
+
+      this.wsConnection.ws.onerror = (error) => {
+        console.error('❌ WebSocket error:', error);
+        this.isConnected = false;
+      };
+
+    } catch (error) {
+      console.error('Failed to connect WebSocket:', error);
+      this.scheduleReconnect();
+    }
+  }
+
+  private handleWebSocketMessage(data: any): void {
+    if (data.e === '24hrTicker') {
+      // 24hr ticker data
+      const ticker = this.transformBinanceWebSocketTicker(data);
+      this.priceCache.set(data.s, ticker);
+      this.notifyTickerSubscribers(data.s, ticker);
+    } else if (data.e === 'kline') {
+      // Candlestick data
+      const candle = this.transformBinanceKlineData(data.k);
+      this.notifyCandleSubscribers(data.s, candle);
+    }
+  }
+
+  private transformBinanceTickerData(data: BinanceTickerResponse): TickerData {
+    return {
+      symbol: this.normalizeSymbol(data.symbol),
+      price: parseFloat(data.price),
+      change24h: parseFloat(data.priceChangePercent),
+      volume24h: parseFloat(data.volume),
+      high24h: 0, // Not available in this endpoint
+      low24h: 0,  // Not available in this endpoint
+      timestamp: Date.now(),
+      bid: parseFloat(data.price) * 0.999, // Approximate bid
+      ask: parseFloat(data.price) * 1.001, // Approximate ask
+      lastUpdate: Date.now()
+    };
+  }
+
+  private transformBinanceWebSocketTicker(data: any): TickerData {
+    return {
+      symbol: this.normalizeSymbol(data.s),
+      price: parseFloat(data.c), // Close price
+      change24h: parseFloat(data.P), // Price change percent
+      volume24h: parseFloat(data.v), // Volume
+      high24h: parseFloat(data.h), // High price
+      low24h: parseFloat(data.l), // Low price
+      timestamp: data.E, // Event time
+      bid: parseFloat(data.b), // Best bid
+      ask: parseFloat(data.a), // Best ask
+      lastUpdate: Date.now()
+    };
+  }
+
+  private transformBinanceKlineData(data: any): CandlestickData {
+    return {
+      symbol: this.normalizeSymbol(data.s),
+      timestamp: data.t, // Open time
+      open: parseFloat(data.o),
+      high: parseFloat(data.h),
+      low: parseFloat(data.l),
+      close: parseFloat(data.c),
+      volume: parseFloat(data.v)
+    };
+  }
+
+  private normalizeSymbol(binanceSymbol: string): string {
+    // Convert BTCUSDT to BTC/USDT format
+    if (binanceSymbol.endsWith('USDT')) {
+      const base = binanceSymbol.replace('USDT', '');
+      return `${base}/USDT`;
+    }
+    return binanceSymbol;
+  }
+
+  private notifyTickerSubscribers(symbol: string, ticker: TickerData): void {
+    const callbacks = this.tickerCallbacks.get(symbol);
+    if (callbacks) {
+      callbacks.forEach(callback => {
+        try {
+          callback(ticker);
+        } catch (error) {
+          console.error('Error in ticker callback:', error);
+        }
+      });
+    }
+  }
+
+  private notifyCandleSubscribers(symbol: string, candle: CandlestickData): void {
+    const callbacks = this.candleCallbacks.get(symbol);
+    if (callbacks) {
+      callbacks.forEach(callback => {
+        try {
+          callback(candle);
+        } catch (error) {
+          console.error('Error in candle callback:', error);
+        }
+      });
+    }
+  }
+
+  private startHeartbeat(): void {
+    this.heartbeatInterval = setInterval(() => {
+      if (this.wsConnection.ws?.readyState === WebSocket.OPEN) {
+        // Binance WebSocket doesn't require ping, it automatically handles it
+      }
+    }, 30000);
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
+  }
+
+  private scheduleReconnect(): void {
+    if (this.wsConnection.reconnectAttempts < this.wsConnection.maxReconnectAttempts) {
+      this.wsConnection.reconnectAttempts++;
+      const delay = this.wsConnection.reconnectDelay * Math.pow(2, this.wsConnection.reconnectAttempts - 1);
+      
+      console.log(`⏳ Scheduling reconnect attempt ${this.wsConnection.reconnectAttempts}/${this.wsConnection.maxReconnectAttempts} in ${delay}ms`);
+      
+      setTimeout(() => {
+        this.connectWebSocket();
+      }, delay);
+    } else {
+      console.error('❌ Max reconnection attempts reached. Please refresh the page.');
+    }
+  }
+
+  // Public API methods
+  public subscribeToTicker(symbol: string, callback: (data: TickerData) => void): () => void {
+    const normalizedSymbol = symbol.replace('/', '').toUpperCase() + 'T';
+    
+    if (!this.tickerCallbacks.has(normalizedSymbol)) {
+      this.tickerCallbacks.set(normalizedSymbol, []);
+    }
+    
+    this.tickerCallbacks.get(normalizedSymbol)!.push(callback);
+    
+    // Send cached data immediately if available
+    const cached = this.priceCache.get(normalizedSymbol);
+    if (cached) {
+      callback(cached);
+    }
+    
+    // Return unsubscribe function
+    return () => {
+      const callbacks = this.tickerCallbacks.get(normalizedSymbol);
+      if (callbacks) {
+        const index = callbacks.indexOf(callback);
+        if (index > -1) {
+          callbacks.splice(index, 1);
+        }
+      }
+    };
+  }
+
+  public subscribeToCandles(symbol: string, interval: string, callback: (data: CandlestickData) => void): () => void {
+    const normalizedSymbol = symbol.replace('/', '').toUpperCase() + 'T';
+    const key = `${normalizedSymbol}_${interval}`;
+    
+    if (!this.candleCallbacks.has(key)) {
+      this.candleCallbacks.set(key, []);
+    }
+    
+    this.candleCallbacks.get(key)!.push(callback);
+    
+    // Return unsubscribe function
+    return () => {
+      const callbacks = this.candleCallbacks.get(key);
+      if (callbacks) {
+        const index = callbacks.indexOf(callback);
+        if (index > -1) {
+          callbacks.splice(index, 1);
+        }
+      }
+    };
+  }
+
+  public async getLatestPrice(symbol: string): Promise<TickerData | null> {
+    const normalizedSymbol = symbol.replace('/', '').toUpperCase() + 'T';
+    
+    // Return cached data if available
+    const cached = this.priceCache.get(normalizedSymbol);
+    if (cached && Date.now() - cached.lastUpdate < 5000) { // Use cache if less than 5 seconds old
+      return cached;
+    }
+    
+    // Fetch fresh data
+    try {
+      const response = await fetch(`${this.REST_BASE_URL}ticker/24hr?symbol=${normalizedSymbol}`);
+      if (response.ok) {
+        const data: BinanceTickerResponse = await response.json();
+        const ticker = this.transformBinanceTickerData(data);
+        this.priceCache.set(normalizedSymbol, ticker);
+        return ticker;
+      }
+    } catch (error) {
+      console.error('Failed to fetch latest price:', error);
+    }
+    
+    return cached || null;
+  }
+
+  public isConnectedToRealTimeData(): boolean {
+    return this.isConnected;
+  }
+
+  public getConnectionStatus(): {
+    connected: boolean;
+    reconnectAttempts: number;
+    cachedSymbols: string[];
+  } {
+    return {
+      connected: this.isConnected,
+      reconnectAttempts: this.wsConnection.reconnectAttempts,
+      cachedSymbols: Array.from(this.priceCache.keys())
+    };
+  }
+
+  public disconnect(): void {
+    if (this.wsConnection.ws) {
+      this.wsConnection.ws.close();
+    }
+    this.stopHeartbeat();
+    this.isConnected = false;
+  }
+}
+
+export default RealTimeMarketDataService;
