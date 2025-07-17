@@ -129,7 +129,7 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
       // Since we don't have historical values stored yet, we'll calculate from current data
       // In a real application, this would come from a database of historical portfolio values
       const currentValue = positions.reduce((total, pos) => total + (pos.size * pos.currentPrice), 0);
-
+      
       // Generate basic historical values based on current portfolio state
       // This is a placeholder until real historical tracking is implemented
       const historicalValues = [
@@ -137,9 +137,9 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
         { date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), value: currentValue * 0.98 },
         { date: new Date().toISOString(), value: currentValue }
       ];
-
+      
       console.log('✅ Calculating portfolio performance from current data');
-
+      
       const performance = services.portfolio.calculatePortfolioPerformance(
         positions,
         trades,
@@ -171,7 +171,7 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
       const realTimeService = RealTimeMarketDataService.getInstance();
       const defaultSymbol = 'BTC/USDT'; // Use default symbol for technical analysis
       const candlestickData = await realTimeService.getCandlestickData(defaultSymbol, '1h', 100);
-
+      
       console.log('✅ Using REAL candlestick data for technical analysis');
       const indicators = services.technical.calculateIndicators(candlestickData);
       setTechnicalIndicators(indicators);
@@ -209,16 +209,16 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
     try {
       setLoading(true);
       const symbols = ['BTC', 'ETH', 'SOL', 'ADA', 'DOT'];
-
+      
       console.log('🚀 Loading REAL market data from live APIs...');
-
+      
       // Get REAL current market data for BTC
       const currentBTCPrice = await services.market.getCurrentPrice('BTC');
       console.log('💰 Current BTC price:', currentBTCPrice);
-
+      
       // Use REAL historical data instead of fake mock data
       const realCandleData = await services.market.getHistoricalData('BTC', '1h', 100);
-
+      
       const [
         btcAnalysis,
         marketOpportunities,
@@ -242,7 +242,7 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
       ]);
 
       console.log('✅ All REAL market data loaded successfully');
-
+      
       setMarketAnalysis(btcAnalysis);
       setOpportunities(marketOpportunities);
       setMarketRegime(regime);
@@ -292,7 +292,7 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
     <div className="space-y-6">
       {/* AI Learning Progress */}
       <LearningDashboard />
-
+      
       {/* Market Regime & Fear/Greed */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-gray-800 p-6 rounded-lg">
@@ -616,6 +616,47 @@ const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Risk Metrics */}
+      {riskMetrics && (
+        <div className="bg-gray-800 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-white mb-4">Portfolio Risk</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Risk Score</div>
+              <div className={`text-xl font-semibold ${
+                riskMetrics.riskScore > 70 ? 'text-red-400' :
+                riskMetrics.riskScore > 50 ? 'text-yellow-400' :
+                'text-green-400'
+              }`}>
+                {riskMetrics.riskScore.toFixed(0)}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Max Drawdown</div>
+              <div className="text-xl font-semibold text-red-400">
+                {(riskMetrics.maxDrawdown * 100).toFixed(1)}%
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Sharpe Ratio</div>
+              <div className="text-xl font-semibold text-primary">
+                {riskMetrics.sharpeRatio.toFixed(2)}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Health Status</div>
+              <div className={`text-lg font-semibold ${
+                riskMetrics.healthStatus === 'CRITICAL' ? 'text-red-400' :
+                riskMetrics.healthStatus === 'WARNING' ? 'text-yellow-400' :
+                'text-green-400'
+              }`}>
+                {riskMetrics.healthStatus}
+              </div>
+            </div>
           </div>
         </div>
       )}
