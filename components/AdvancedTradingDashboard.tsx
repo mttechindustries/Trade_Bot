@@ -5,39 +5,209 @@ import OnChainAnalyticsService, { OnChainMetrics, WhaleActivity, DeFiMetrics } f
 import LearningDashboard from './LearningDashboard';
 import { Position, Trade } from '../types';
 import { formatTime } from '../services/timeService';
+import RiskManagementService, { RiskMetrics } from '../services/riskManagementService';
+import PortfolioManagementService, { PortfolioPerformance } from '../services/portfolioManagementService';
+import ArbitrageService, { ArbitrageOpportunity } from '../services/arbitrageService';
+import NewsAnalysisService from '../services/newsAnalysisService';
+import EnhancedAIService from '../services/enhancedAIService';
+import RealTimeMarketDataService from '../services/realTimeMarketDataService';
+import TradingService from '../services/tradingService';
+import TechnicalAnalysisService from '../services/technicalAnalysisService';
 
-interface AdvancedDashboardProps {
-  positions: Position[];
-  trades: Trade[];
+
+interface TradingDashboardProps {
+  currentView: string;
 }
 
-const AdvancedTradingDashboard: React.FC<AdvancedDashboardProps> = ({ positions, trades }) => {
+const AdvancedTradingDashboard: React.FC<TradingDashboardProps> = ({ currentView }) => {
   // Log props to avoid unused parameter warning
-  console.log('Dashboard loaded with', positions.length, 'positions and', trades.length, 'trades');
-  const [marketAnalysis, setMarketAnalysis] = useState<MultiFactorAnalysis | null>(null);
-  const [opportunities, setOpportunities] = useState<MarketOpportunity[]>([]);
-  const [marketRegime, setMarketRegime] = useState<MarketRegime | null>(null);
-  const [socialTrends, setSocialTrends] = useState<SocialTrend[]>([]);
-  const [fearGreedIndex, setFearGreedIndex] = useState<any>(null);
-  const [influencerSignals, setInfluencerSignals] = useState<InfluencerSignal[]>([]);
-  const [whaleActivity, setWhaleActivity] = useState<WhaleActivity[]>([]);
-  const [defiMetrics, setDefiMetrics] = useState<DeFiMetrics[]>([]);
-  const [onChainMetrics, setOnChainMetrics] = useState<OnChainMetrics | null>(null);
+  console.log('Trading Dashboard view:', currentView);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [trades, setTrades] = useState<Trade[]>([]);
+  const [riskMetrics, setRiskMetrics] = useState<RiskMetrics | null>(null);
+  const [portfolioPerformance, setPortfolioPerformance] = useState<PortfolioPerformance | null>(null);
+  const [arbitrageOpportunities, setArbitrageOpportunities] = useState<ArbitrageOpportunity[]>([]);
+  const [technicalIndicators, setTechnicalIndicators] = useState<any | null>(null);
+  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
+  const [newsImpact, setNewsImpact] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [marketAnalysis, setMarketAnalysis] = useState<MultiFactorAnalysis | null>(null);
+    const [opportunities, setOpportunities] = useState<MarketOpportunity[]>([]);
+    const [marketRegime, setMarketRegime] = useState<MarketRegime | null>(null);
+    const [socialTrends, setSocialTrends] = useState<SocialTrend[]>([]);
+    const [fearGreedIndex, setFearGreedIndex] = useState<any>(null);
+    const [influencerSignals, setInfluencerSignals] = useState<InfluencerSignal[]>([]);
+    const [whaleActivity, setWhaleActivity] = useState<WhaleActivity[]>([]);
+    const [defiMetrics, setDefiMetrics] = useState<DeFiMetrics[]>([]);
+    const [onChainMetrics, setOnChainMetrics] = useState<OnChainMetrics | null>(null);
 
   const [services] = useState(() => ({
+    technical: TechnicalAnalysisService.getInstance(),
+    risk: RiskManagementService.getInstance(),
+    portfolio: PortfolioManagementService.getInstance(),
+    arbitrage: ArbitrageService.getInstance(),
+    news: NewsAnalysisService.getInstance(),
+    ai: EnhancedAIService.getInstance(),
+    trading: TradingService.getInstance(),
     market: MarketAnalysisService.getInstance(),
     social: SocialSentimentService.getInstance(),
     onchain: OnChainAnalyticsService.getInstance()
   }));
 
   useEffect(() => {
-    loadDashboardData();
-    const interval = setInterval(loadDashboardData, 60000); // Update every minute
+    initializeDashboard();
+    const interval = setInterval(updateDashboard, 30000); // Update every 30 seconds
     return () => clearInterval(interval);
   }, []);
 
-  const loadDashboardData = async () => {
+  const initializeDashboard = async () => {
+    try {
+      setLoading(true);
+      await Promise.all([
+        loadPositions(),
+        loadTrades(),
+        updateRiskMetrics(),
+        updatePortfolioPerformance(),
+        scanArbitrageOpportunities(),
+        updateTechnicalAnalysis(),
+        getAISuggestions(),
+        getNewsAnalysis(),
+        loadDashboardData()
+      ]);
+    } catch (error) {
+      console.error('Failed to initialize dashboard:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateDashboard = async () => {
+    try {
+      await Promise.all([
+        updateRiskMetrics(),
+        scanArbitrageOpportunities(),
+        updateTechnicalAnalysis(),
+        getNewsAnalysis(),
+        loadDashboardData()
+      ]);
+    } catch (error) {
+      console.error('Failed to update dashboard:', error);
+    }
+  };
+
+  const loadPositions = async () => {
+    try {
+      // Get REAL positions from trading service
+      const realPositions = await services.trading.getPositions();
+      console.log('✅ Loaded REAL positions:', realPositions);
+      setPositions(realPositions);
+    } catch (error) {
+      console.error('❌ Failed to load REAL positions:', error);
+      setPositions([]); // Empty array, no mock data
+    }
+  };
+
+  const loadTrades = async () => {
+    try {
+      // Get REAL trades from trading service
+      const realTrades = await services.trading.getTrades();
+      console.log('✅ Loaded REAL trades:', realTrades);
+      setTrades(realTrades);
+    } catch (error) {
+      console.error('❌ Failed to load REAL trades:', error);
+      setTrades([]); // Empty array, no mock data
+    }
+  };
+
+  const updateRiskMetrics = async () => {
+    if (positions.length > 0) {
+      const metrics = services.risk.calculateRiskMetrics(positions, trades, 100000);
+      setRiskMetrics(metrics);
+    }
+  };
+
+  const updatePortfolioPerformance = async () => {
+    try {
+      // Since we don't have historical values stored yet, we'll calculate from current data
+      // In a real application, this would come from a database of historical portfolio values
+      const currentValue = positions.reduce((total, pos) => total + (pos.size * pos.currentPrice), 0);
+      
+      // Generate basic historical values based on current portfolio state
+      // This is a placeholder until real historical tracking is implemented
+      const historicalValues = [
+        { date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), value: currentValue * 0.95 },
+        { date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), value: currentValue * 0.98 },
+        { date: new Date().toISOString(), value: currentValue }
+      ];
+      
+      console.log('✅ Calculating portfolio performance from current data');
+      
+      const performance = services.portfolio.calculatePortfolioPerformance(
+        positions,
+        trades,
+        historicalValues
+      );
+      setPortfolioPerformance(performance);
+    } catch (error) {
+      console.error('❌ Failed to calculate portfolio performance:', error);
+      setPortfolioPerformance(null);
+    }
+  };
+
+  const scanArbitrageOpportunities = async () => {
+    try {
+      const opportunities = await services.arbitrage.scanArbitrageOpportunities(
+        ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'],
+        0.3, // 0.3% minimum profit
+        'MEDIUM'
+      );
+      setArbitrageOpportunities(opportunities);
+    } catch (error) {
+      console.error('Failed to scan arbitrage opportunities:', error);
+    }
+  };
+
+  const updateTechnicalAnalysis = async () => {
+    try {
+      // Get REAL candlestick data only
+      const realTimeService = RealTimeMarketDataService.getInstance();
+      const defaultSymbol = 'BTC/USDT'; // Use default symbol for technical analysis
+      const candlestickData = await realTimeService.getCandlestickData(defaultSymbol, '1h', 100);
+      
+      console.log('✅ Using REAL candlestick data for technical analysis');
+      const indicators = services.technical.calculateIndicators(candlestickData);
+      setTechnicalIndicators(indicators);
+    } catch (error) {
+      console.error('❌ Failed to get REAL candlestick data:', error);
+      // NO MOCK DATA - Show error state instead
+      setTechnicalIndicators(null);
+    }
+  };
+
+  const getAISuggestions = async () => {
+    try {
+      const suggestions = await services.ai.findProfitableOpportunities(
+        'Conservative balanced portfolio with medium risk tolerance',
+        'medium',
+        '4h',
+        5
+      );
+      setAiSuggestions(suggestions);
+    } catch (error) {
+      console.error('Failed to get AI suggestions:', error);
+    }
+  };
+
+  const getNewsAnalysis = async () => {
+    try {
+      const analysis = await services.news.analyzeNewsImpact(['BTC', 'ETH', 'ADA']);
+      setNewsImpact(analysis);
+    } catch (error) {
+      console.error('Failed to get news analysis:', error);
+    }
+  };
+
+    const loadDashboardData = async () => {
     try {
       setLoading(true);
       const symbols = ['BTC', 'ETH', 'SOL', 'ADA', 'DOT'];
@@ -281,7 +451,7 @@ const AdvancedTradingDashboard: React.FC<AdvancedDashboardProps> = ({ positions,
                 </div>
               </div>
               <div className="mt-2 text-sm text-gray-400">
-                <span className="font-medium">Timeline:</span> {opp.timeHorizon} | 
+                <span className="font-medium">Timeline:</span> {opp.timeHorizon} |
                 <span className="font-medium"> Max Risk:</span> {opp.maxRisk}%
               </div>
             </div>
@@ -448,6 +618,47 @@ const AdvancedTradingDashboard: React.FC<AdvancedDashboardProps> = ({ positions,
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Risk Metrics */}
+      {riskMetrics && (
+        <div className="bg-gray-800 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-white mb-4">Portfolio Risk</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Risk Score</div>
+              <div className={`text-xl font-semibold ${
+                riskMetrics.riskScore > 70 ? 'text-red-400' :
+                riskMetrics.riskScore > 50 ? 'text-yellow-400' :
+                'text-green-400'
+              }`}>
+                {riskMetrics.riskScore.toFixed(0)}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Max Drawdown</div>
+              <div className="text-xl font-semibold text-red-400">
+                {(riskMetrics.maxDrawdown * 100).toFixed(1)}%
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Sharpe Ratio</div>
+              <div className="text-xl font-semibold text-primary">
+                {riskMetrics.sharpeRatio.toFixed(2)}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-400 mb-1">Health Status</div>
+              <div className={`text-lg font-semibold ${
+                riskMetrics.healthStatus === 'CRITICAL' ? 'text-red-400' :
+                riskMetrics.healthStatus === 'WARNING' ? 'text-yellow-400' :
+                'text-green-400'
+              }`}>
+                {riskMetrics.healthStatus}
+              </div>
+            </div>
           </div>
         </div>
       )}
