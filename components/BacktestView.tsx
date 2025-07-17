@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BacktestResult } from '../types';
 import { generateBacktestResult } from '../services/aiModelService';
@@ -25,7 +24,7 @@ const BacktestView: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<BacktestResult | null>(null);
     const [error, setError] = useState<string | null>(null);
-    
+
     // Use real trading pairs instead of mock data
     const realTradingPairs = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'ADA/USDT', 'DOT/USDT', 'LINK/USDT', 'MATIC/USDT', 'XRP/USDT'];
     const [selectedPair, setSelectedPair] = useState<string>(realTradingPairs[0]);
