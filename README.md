@@ -10,80 +10,46 @@
 
 ---
 
-## 🎯 **Overview**
+## 🎯 Core Trading Philosophy
 
-The **Gemini AI Trading Bot** is a cutting-edge, professional-grade cryptocurrency trading platform that leverages Google's Gemini AI for real-time market analysis and momentum detection. Built for serious traders who demand **REAL data**, **REAL performance**, and **REAL results**.
+[cite_start]This is not just a trading bot; it's an advanced trading system built on a professional, risk-first philosophy[cite: 37, 38]. [cite_start]The strategies and tools within are designed to shift from a defensive mindset of capital preservation to an offensive one of profit maximization, but only when specific, high-conviction criteria are met[cite: 649, 1152].
 
-### ⚡ **Key Highlights**
-- **100% Real Market Data** - No fake prices, no simulations, no playground mode
-- **AI-Powered Analysis** - Google Gemini AI for market sentiment and momentum detection
-- **Real-Time Execution** - Ultra-fast trade execution with microsecond precision
-- **Risk Management** - Advanced position sizing, stop-losses, and portfolio protection
-- **Multi-Exchange Support** - Binance, Coinbase, Uniswap, PancakeSwap integration
-- **Professional UI** - Real-time dashboard for monitoring and execution
+[cite_start]**The governing principle is to master the art of not losing money first; then, to learn the art of making a lot more**[cite: 651].
 
 ---
 
-## � **Core Features**
+## ⚡ Key Features & Implemented Strategies
 
-### 🤖 **AI-Powered Momentum Hunter**
-- **Google Gemini AI Integration** - Advanced market analysis and signal generation
-- **Real-Time Scanning** - Continuous monitoring for high-momentum opportunities
-- **Multi-Signal Detection** - Volume spikes, social buzz, whale activity, breakouts
-- **Risk Assessment** - AI-calculated risk levels and confidence scores
-- **One-Click Execution** - Instant trade execution from AI-generated signals
+### 🧠 **The Signal Intelligence Engine**
+[cite_start]The bot moves beyond simple indicators to a "Signal Convergence" approach, where confidence in a trade is built as multiple, independent data points align[cite: 923, 979].
 
-### 📊 **Advanced Analytics**
-- **Live Market Data** - Real-time price feeds from multiple exchanges
-- **Technical Indicators** - RSI, MACD, Bollinger Bands, Moving Averages
-- **Social Sentiment** - Twitter, Reddit, Telegram sentiment analysis
-- **On-Chain Metrics** - Whale transactions, holder analysis, liquidity tracking
-- **Performance Monitoring** - Real-time P&L, drawdown analysis, Sharpe ratios
+- [cite_start]**Multi-Factor Analysis**: Fuses on-chain data, social media sentiment, technical indicators, and fundamental catalysts into a unified, actionable signal[cite: 853, 1131].
+- **Market Regime Detection**: Automatically identifies if the market is in a `bull`, `bear`, `sideways`, or `volatile` state and adapts its strategy recommendations accordingly.
+- [cite_start]**AI-Powered Momentum Hunter**: Uses Google Gemini to scan the market in real-time for high-momentum opportunities, identifying assets with the potential for explosive, multi-day runs[cite: 853, 1131].
+- **Data Source Integration**: Leverages **TradingView** for high-quality, aggregated charting data and **DexScreener** for real-time data from decentralized exchanges.
 
-### ⚡ **Ultra-Fast Execution**
-- **Quick Execution Service** - Sub-second trade execution
-- **Smart Order Routing** - Optimal exchange selection for best prices
-- **Slippage Protection** - Dynamic slippage calculation and protection
-- **Position Management** - Automated stop-losses and take-profit levels
-- **Risk Controls** - Position sizing, maximum allocation limits
+### 📈 **The Offensive Playbook: Maximizing Gains**
+[cite_start]Once a high-conviction "runner" is identified, the bot can switch to an offensive mode, employing advanced tactics to maximize profits[cite: 1152]:
 
-### 🛡️ **Risk Management**
-- **Dynamic Stop Losses** - Trailing stops based on volatility
-- **Portfolio Limits** - Maximum position size and allocation controls
-- **Drawdown Protection** - Automatic trading halt on excessive losses
-- **Market Condition Detection** - Bull/bear market adaptation
-- **Emergency Controls** - Panic sell and position liquidation
+- [cite_start]**Pyramiding (Adding to Winners)**: A safe, systematic method for adding to a winning position to dramatically multiply profits without adding significant risk[cite: 682, 1185, 1186]. [cite_start]The Golden Rule is to only add when the stop-loss for the *entire* position can be moved to a point of net profit[cite: 685, 1189].
+- [cite_start]**Advanced Exit Strategies**: Utilizes techniques like ATR-based trailing stops and the "Blow-Off Top" exit strategy (based on 1-minute chart structure breaks) to ride a trend to its peak[cite: 729, 1248].
 
-### 📱 **Professional Dashboard**
-- **Real-Time Monitoring** - Live portfolio value, positions, and P&L
-- **Signal Management** - AI-generated signals with detailed analysis
-- **Trade History** - Complete transaction log with performance metrics
-- **Configuration Panel** - Customizable trading parameters and filters
-- **Alert System** - Multi-channel notifications (email, SMS, push)
-- **Real-time Notifications**: Toast notifications for trading events
-- **Live Price Ticker**: Sidebar with streaming market prices
-- **Enhanced Charts**: Professional trading charts with technical indicators
-- **Configuration Panel**: Comprehensive settings management
-- **Responsive Design**: Mobile-friendly responsive layout
-- **Dark Theme**: Professional dark theme with glassmorphism effects
+### 🛡️ **Risk-First Framework**
+[cite_start]This system is built on a non-negotiable foundation of disciplined risk management[cite: 37, 38, 1063].
 
-### AI-Powered Analysis
-- **Market Sentiment**: AI-driven market analysis using Gemini API
-- **Trade Explanations**: Detailed rationale for trading decisions
-- **Market Screening**: AI-powered opportunity discovery
-- **Strategy Backtesting**: Historical performance simulation
+- [cite_start]**The 1-2% Rule**: The bot will never risk more than 1-2% of total trading capital on any single trade[cite: 158, 1064, 1147].
+- [cite_start]**Calculated Position Sizing**: Position size is always determined by a formula based on account risk, entry price, and stop-loss price, never on emotion[cite: 160, 1067, 1068].
+- [cite_start]**Hard Stop-Losses**: All trades are protected by a hard stop-loss order placed at the time of entry[cite: 169, 1072].
+- [cite_start]**The "Free Trade"**: A core psychological and risk-management technique where, after taking initial profits, the stop-loss is moved to the breakeven point, making it impossible to lose capital on the remainder of the trade[cite: 702, 1206].
 
-### Risk Management
-- **Portfolio Risk Metrics**: VaR, Sharpe ratio, drawdown analysis
-- **Real-time Monitoring**: Live risk exposure tracking
-- **Configurable Limits**: Customizable risk parameters
-- **Alert System**: Price alerts and risk notifications
+### ⚠️ **Navigating High-Volatility & Manipulation**
+The bot is designed to operate in the highly volatile and often manipulated world of micro-cap crypto assets. [cite_start]It understands that the very characteristics that create opportunities for explosive gains are also the source of catastrophic risk[cite: 762, 1128].
 
-### State Management
-- **Centralized Store**: Custom event-driven state management
-- **Real-time Updates**: Live data synchronization
-- **Persistent Configuration**: Saved user preferences and settings
-- **Event System**: Reactive updates across components
+- [cite_start]**The Radar's Dilemma**: The system is aware that the on-chain signals of a pump-and-dump scheme are often identical to those of a legitimate breakout[cite: 61, 831].
+- [cite_start]**Qualitative Due Diligence**: Before taking a signal from a purely quantitative screener, a professional trader must perform a qualitative check, including verifying the project team, scrutinizing the whitepaper, analyzing community sentiment, and performing on-chain forensics[cite: 138, 139, 141, 142, 144].
+- [cite_start]**Exit Feasibility Assessment**: A key pre-trade check is to ensure there is sufficient liquidity to exit the intended position without crashing the price[cite: 1037].
+
+---
 
 ## 🛠 Technical Architecture
 
@@ -95,32 +61,24 @@ The **Gemini AI Trading Bot** is a cutting-edge, professional-grade cryptocurren
 - **Custom State Management**: Event-driven reactive store
 
 ### API Integrations
-- **Binance WebSocket API**: Real-time market data
-- **Binance REST API**: Historical data and order management
-- **Gemini AI API**: Intelligent market analysis
-- **CoinGecko API**: Alternative market data source
-
-### Enhanced Components
-```
-components/
-├── NotificationSystem.tsx     # Real-time toast notifications
-├── PriceTicker.tsx           # Live streaming price display
-├── ConfigurationPanel.tsx    # Comprehensive settings management
-├── TradeAnalysisModal.tsx    # AI-powered trade analysis
-├── PortfolioChart.tsx        # Enhanced portfolio visualization
-├── RiskMetricsPanel.tsx      # Real-time risk monitoring
-└── OrderManagement.tsx       # Advanced order handling
-```
+- **TradingView**: For high-quality charting and centralized exchange data.
+- **DexScreener**: For real-time data from decentralized exchanges.
+- **Gemini AI API**: For intelligent market analysis, sentiment, and trade explanations.
+- **Binance API**: For live trading and account management (when configured).
 
 ### Services Layer
-```
 services/
-├── marketDataService.ts      # Real-time WebSocket management
-├── orderService.ts          # Trading order execution
-├── riskService.ts           # Risk calculation engine
-├── aiAnalysisService.ts     # AI-powered insights
-└── dataStorageService.ts    # Local data persistence
-```
+├── tradingViewService.ts     # NEW: Handles all TradingView data
+├── dexscreenerService.ts     # NEW: Handles all DexScreener data
+├── realTimeMarketDataService.ts # Manages and aggregates data from multiple sources
+├── marketAnalysisService.ts  # The "intelligence engine" of the bot
+├── riskManagementService.ts  # Advanced risk calculations and portfolio health
+├── portfolioManagementService.ts # Portfolio analysis and optimization
+├── strategyOptimizationService.ts # Backtesting and strategy optimization
+└── ... and more
+
+
+---
 
 ## 🚀 Quick Start
 
@@ -144,288 +102,36 @@ cp .env.example .env.local
 
 # Start development server
 npm run dev
-```
+Environment Setup
+Create a .env.local file with:
 
-### Environment Setup
-Create a `.env.local` file with:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-BINANCE_API_KEY=your_binance_api_key (optional)
-BINANCE_SECRET_KEY=your_binance_secret (optional)
-```
+Code snippet
 
-## 🎯 Feature Highlights
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+VITE_BINANCE_API_KEY=your_binance_api_key (optional)
+VITE_BINANCE_SECRET_KEY=your_binance_secret (optional)
+🤝 Contributing
+Development Setup
+Fork the repository
 
-### 1. Real-Time Dashboard
-- Live portfolio value tracking
-- Real-time P&L updates
-- Active positions monitoring
-- Risk metrics display
-- Connection status indicators
+Create feature branch
 
-### 2. Advanced Trading
-- Multiple order types (Market, Limit, Stop)
-- Leverage trading support
-- Automatic stop-loss and take-profit
-- Trailing stop functionality
-- Position sizing calculator
+Install dependencies
 
-### 3. Risk Management
-- Real-time risk metrics calculation
-- Portfolio exposure monitoring
-- Drawdown tracking
-- Value at Risk (VaR) calculation
-- Configurable risk limits
+Run development server
 
-### 4. AI Integration
-- Market sentiment analysis
-- Trade opportunity detection
-- Strategy performance prediction
-- Risk assessment recommendations
-- Automated trade explanations
+Make changes and test
 
-### 5. Professional UI
-- Real-time data visualization
-- Interactive charts and graphs
-- Live notifications system
-- Responsive mobile design
-- Customizable workspace
+Submit pull request
 
-## 📊 Trading Features
+Code Standards
+TypeScript: Strict type checking
 
-### Order Management
-```typescript
-interface Order {
-  id: string;
-  symbol: string;
-  side: 'buy' | 'sell';
-  type: 'market' | 'limit' | 'stop' | 'stop-limit';
-  amount: number;
-  price?: number;
-  stopPrice?: number;
-  status: 'pending' | 'open' | 'closed' | 'cancelled';
-}
-```
+ESLint: Code quality enforcement
 
-### Position Tracking
-```typescript
-interface Position {
-  symbol: string;
-  side: 'long' | 'short';
-  size: number;
-  entryPrice: number;
-  currentPrice: number;
-  pnl: number;
-  pnlPercent: number;
-  leverage: number;
-  liquidationPrice?: number;
-}
-```
+Prettier: Code formatting
 
-### Risk Configuration
-```typescript
-interface TradingConfig {
-  maxPositions: number;
-  riskPerTrade: number;
-  stopLossPercent: number;
-  takeProfitPercent: number;
-  enableTrailing: boolean;
-  trailingPercent: number;
-  allowedPairs: string[];
-  strategies: string[];
-}
-```
+Testing: Unit and integration tests
 
-## 🔧 Configuration
-
-### Trading Parameters
-- **Max Positions**: Limit concurrent open positions
-- **Risk Per Trade**: Percentage of portfolio per trade
-- **Stop Loss**: Automatic loss limitation
-- **Take Profit**: Automatic profit taking
-- **Trailing Stops**: Dynamic stop-loss adjustment
-- **Allowed Pairs**: Whitelist of tradeable symbols
-
-### AI Settings
-- **Analysis Frequency**: How often to run AI analysis
-- **Confidence Threshold**: Minimum confidence for signals
-- **Market Screening**: Automated opportunity detection
-- **Risk Assessment**: AI-powered risk evaluation
-
-### UI Preferences
-- **Theme Selection**: Dark/Light mode toggle
-- **Notification Settings**: Configure alert types
-- **Chart Preferences**: Default timeframes and indicators
-- **Layout Customization**: Personalized workspace
-
-## 📈 Performance Monitoring
-
-### Real-Time Metrics
-- **Total P&L**: Running profit/loss calculation
-- **Win Rate**: Percentage of profitable trades
-- **Sharpe Ratio**: Risk-adjusted returns
-- **Maximum Drawdown**: Largest portfolio decline
-- **Average Trade Duration**: Time in market
-- **Volume Traded**: Total trading activity
-
-### Risk Analytics
-- **Portfolio Exposure**: Current market exposure
-- **Correlation Analysis**: Asset correlation tracking
-- **Volatility Metrics**: Market volatility assessment
-- **Stress Testing**: Portfolio resilience analysis
-
-## 🔐 Security Features
-
-### Data Protection
-- **Encrypted Storage**: Local data encryption
-- **API Key Management**: Secure credential handling
-- **Session Management**: Automatic session timeouts
-- **Input Validation**: Comprehensive data validation
-
-### Trading Safety
-- **Order Confirmation**: Double-confirmation for trades
-- **Position Limits**: Maximum exposure controls
-- **Emergency Stop**: Instant trading halt capability
-- **Audit Trail**: Complete transaction logging
-
-## 🚀 Production Deployment
-
-### Build Optimization
-```bash
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
-
-# Performance analysis
-npm run analyze
-```
-
-### Deployment Options
-- **Vercel**: Recommended for frontend deployment
-- **Netlify**: Alternative static hosting
-- **Docker**: Containerized deployment
-- **AWS/GCP**: Cloud platform deployment
-
-### Performance Optimizations
-- **Code Splitting**: Lazy loading of components
-- **WebSocket Pooling**: Efficient connection management
-- **Data Caching**: Intelligent cache strategies
-- **Bundle Optimization**: Minimized asset sizes
-
-## 🐛 Troubleshooting
-
-### Common Issues
-1. **WebSocket Connection Failures**
-   - Check internet connectivity
-   - Verify API endpoints
-   - Review browser WebSocket support
-
-2. **AI Analysis Errors**
-   - Confirm Gemini API key validity
-   - Check API quota limits
-   - Verify request format
-
-3. **Performance Issues**
-   - Monitor memory usage
-   - Check WebSocket connection count
-   - Review update frequency settings
-
-### Development Tools
-- **React DevTools**: Component debugging
-- **TypeScript Compiler**: Type checking
-- **ESLint**: Code quality analysis
-- **Performance Profiler**: Performance monitoring
-
-## 📚 API Documentation
-
-### Market Data Service
-```typescript
-// Subscribe to real-time ticker data
-const unsubscribe = marketData.subscribeToTicker('BTCUSDT', (data) => {
-  console.log('Price update:', data.price);
-});
-
-// Fetch historical data
-const history = await marketData.fetchHistoricalData('BTCUSDT', '1h', 100);
-```
-
-### Trading Store
-```typescript
-// Add new trade
-tradingStore.addTrade(tradeData);
-
-// Update trade
-tradingStore.updateTrade(tradeId, updates);
-
-// Close trade
-tradingStore.closeTrade(tradeId, closePrice, closeTime);
-```
-
-### Notification System
-```typescript
-// Add notification
-tradingStore.addNotification({
-  type: 'success',
-  title: 'Trade Executed',
-  message: 'BTC/USDT position opened successfully',
-  read: false
-});
-```
-
-## 🤝 Contributing
-
-### Development Setup
-1. Fork the repository
-2. Create feature branch
-3. Install dependencies
-4. Run development server
-5. Make changes and test
-6. Submit pull request
-
-### Code Standards
-- **TypeScript**: Strict type checking
-- **ESLint**: Code quality enforcement
-- **Prettier**: Code formatting
-- **Testing**: Unit and integration tests
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Binance API**: Real-time market data
-- **Google Gemini**: AI-powered analysis
-- **React Team**: Framework and tools
-- **TypeScript Team**: Type safety
-- **Vite Team**: Build tooling
-
----
-
-## 🔮 Future Roadmap
-
-### Planned Features
-- [ ] Multi-exchange support (Coinbase, Kraken)
-- [ ] Advanced charting with TradingView
-- [ ] Social trading features
-- [ ] Mobile app development
-- [ ] Advanced strategy builder
-- [ ] Paper trading mode
-- [ ] Portfolio analytics dashboard
-- [ ] Automated trading strategies
-- [ ] Risk management tools
-- [ ] Performance benchmarking
-
-### Technical Improvements
-- [ ] WebAssembly performance optimization
-- [ ] GraphQL API integration
-- [ ] Offline-first architecture
-- [ ] Advanced caching strategies
-- [ ] Real-time collaboration features
-- [ ] Enhanced security measures
-- [ ] Accessibility improvements
-- [ ] Internationalization support
-
-For the latest updates and feature requests, please check our [GitHub Issues](https://github.com/your-repo/issues) page.
+📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
