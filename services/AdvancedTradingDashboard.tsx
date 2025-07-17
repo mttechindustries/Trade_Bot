@@ -12,6 +12,8 @@ import NewsAnalysisService from '../services/newsAnalysisService';
 import EnhancedAIService from '../services/enhancedAIService';
 import RealTimeMarketDataService from '../services/realTimeMarketDataService';
 import TradingService from '../services/tradingService';
+import TechnicalAnalysisService from '../services/technicalAnalysisService';
+
 
 interface TradingDashboardProps {
   currentView: string;
